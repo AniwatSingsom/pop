@@ -1,4 +1,3 @@
-// netlify/functions/clicks.js
 const faunadb = require('faunadb');
 const client = new faunadb.Client({ secret: process.env.FAUNA_SECRET });
 const q = faunadb.query;
@@ -11,12 +10,13 @@ exports.handler = async (event, context) => {
         };
     }
 
-    const { username } = JSON.parse(event.body);
+    // Get the user's IP address
+    const userIP = context.clientContext.ip;
 
     try {
-        // Check if the user already exists
+        // Check if the user already exists based on IP
         const userData = await client.query(
-            q.Get(q.Match(q.Index('clicks_by_username'), username))
+            q.Get(q.Match(q.Index('clicks_by_ip'), userIP))
         );
 
         // Increment the clicks count
@@ -36,7 +36,7 @@ exports.handler = async (event, context) => {
             // User not found, create a new entry
             const result = await client.query(
                 q.Create(q.Collection('clicks'), {
-                    data: { username, clicks: 1 },
+                    data: { ip: userIP, clicks: 1 },
                 })
             );
             return {
