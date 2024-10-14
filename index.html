@@ -11,14 +11,19 @@
     <div class="container">
         <h1>ສົມໝາຍປັອບໆ</h1>
         <p id="target">0</p>
-        <img src="./imge1.png" id="imge1">
+        <img src="./imge1.png" id="imge1" alt="Popcat">
+        <p id="totalClicks">Total Clicks: 0</p>
     </div>
+
+    <!-- Javascript Section -->
     <script>
         window.onload = () => {
             let img = document.querySelector('#imge1');
             let counter = document.querySelector('#target');
+            let totalClicksDisplay = document.querySelector('#totalClicks');
             let score = 0;
             let sound = new Audio('lol.mp3');
+            let username = 'user123'; // Replace with actual username logic
 
             img.addEventListener('mousedown', async () => {
                 img.src = 'imge2.png';
@@ -29,7 +34,11 @@
                     img.src = 'imge1.png';
                 };
 
-                await sendClickData('username', score);
+                // Send click data to the serverless function
+                const totalClicks = await sendClickData(username);
+                if (totalClicks) {
+                    totalClicksDisplay.innerText = `Total Clicks: ${totalClicks}`;
+                }
             });
 
             function addToCounter() {
@@ -37,17 +46,21 @@
                 counter.innerHTML = score;
             }
 
-            async function sendClickData(username, clicks) {
+            async function sendClickData(username) {
                 try {
-                    await fetch('/.netlify/functions/clicks', {
+                    const response = await fetch('/.netlify/functions/clicks', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({ username, clicks }),
+                        body: JSON.stringify({ username }),
                     });
+
+                    const data = await response.json();
+                    return data.clicks; // Return the total clicks for the user
                 } catch (error) {
                     console.error('Error sending click data:', error);
+                    return null;
                 }
             }
         }
