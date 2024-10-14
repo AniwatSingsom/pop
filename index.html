@@ -13,7 +13,6 @@
         <p id="target">0</p>
         <img src="./imge1.png" id="imge1">
     </div>
-
     <script>
         window.onload = () => {
             let img = document.querySelector('#imge1');
@@ -21,7 +20,7 @@
             let score = 0;
             let sound = new Audio('lol.mp3');
 
-            img.addEventListener('mousedown', () => {
+            img.addEventListener('mousedown', async () => {
                 img.src = 'imge2.png';
                 sound.play();
                 addToCounter();
@@ -29,11 +28,27 @@
                 sound.onended = () => {
                     img.src = 'imge1.png';
                 };
+
+                await sendClickData('username', score);
             });
 
             function addToCounter() {
                 score++;
                 counter.innerHTML = score;
+            }
+
+            async function sendClickData(username, clicks) {
+                try {
+                    await fetch('/.netlify/functions/clicks', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ username, clicks }),
+                    });
+                } catch (error) {
+                    console.error('Error sending click data:', error);
+                }
             }
         }
     </script>
