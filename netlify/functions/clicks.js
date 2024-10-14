@@ -2,7 +2,7 @@ const faunadb = require('faunadb');
 const client = new faunadb.Client({ secret: process.env.FAUNA_SECRET });
 const q = faunadb.query;
 
-exports.handler = async (event, context) => {
+exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
         return {
             statusCode: 405,
@@ -10,19 +10,15 @@ exports.handler = async (event, context) => {
         };
     }
 
-    // Get the user's IP address
-    const userIP = context.clientContext.ip;
+    const { username } = JSON.parse(event.body);
 
     try {
-        // Check if the user already exists based on IP
         const userData = await client.query(
-            q.Get(q.Match(q.Index('clicks_by_ip'), userIP))
+            q.Get(q.Match(q.Index('clicks_by_username'), username))
         );
 
-        // Increment the clicks count
         const updatedClicks = userData.data.clicks + 1;
 
-        // Update the user's clicks in the database
         await client.query(
             q.Update(userData.ref, { data: { clicks: updatedClicks } })
         );
@@ -33,10 +29,9 @@ exports.handler = async (event, context) => {
         };
     } catch (error) {
         if (error.message.includes("not found")) {
-            // User not found, create a new entry
             const result = await client.query(
                 q.Create(q.Collection('clicks'), {
-                    data: { ip: userIP, clicks: 1 },
+                    data: { username, clicks: 1 },
                 })
             );
             return {

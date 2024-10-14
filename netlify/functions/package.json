@@ -1,46 +1,22 @@
 {
-  "name": "functions",
+  "name": "sommaipop",
   "version": "1.0.0",
-  "main": "clicks.js",
-  "dependencies": {
-    "ansi-align": "^3.0.1",
-    "ansi-regex": "^5.0.1",
-    "ansi-styles": "^4.3.0",
-    "base64-js": "^1.5.1",
-    "boxen": "^5.1.2",
-    "btoa-lite": "^1.0.0",
-    "camelcase": "^6.3.0",
-    "chalk": "^4.1.2",
-    "cli-boxes": "^2.2.1",
-    "color-convert": "^2.0.1",
-    "color-name": "^1.1.4",
-    "cross-fetch": "^3.1.8",
-    "dotenv": "^8.6.0",
-    "emoji-regex": "^8.0.0",
-    "faunadb": "^4.8.0",
-    "fn-annotate": "^1.2.0",
-    "has-flag": "^4.0.0",
-    "is-fullwidth-code-point": "^3.0.0",
-    "node-abort-controller": "^3.1.1",
-    "node-fetch": "^2.7.0",
-    "object-assign": "^4.1.1",
-    "string-width": "^4.2.3",
-    "strip-ansi": "^6.0.1",
-    "supports-color": "^7.2.0",
-    "tr46": "^0.0.3",
-    "type-fest": "^0.20.2",
-    "util-deprecate": "^1.0.2",
-    "webidl-conversions": "^3.0.1",
-    "whatwg-url": "^5.0.0",
-    "widest-line": "^3.1.0",
-    "wrap-ansi": "^7.0.0"
-  },
-  "devDependencies": {},
+  "description": "A simple click tracking game using FaunaDB.",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "netlify functions:build",
+    "dev": "netlify dev"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  "author": "sommaipop",
+  "license": "MIT",
+  "dependencies": {
+    "faunadb": "^3.0.0"
+  },
+  "devDependencies": {
+    "@netlify/plugin-functions-install-core": "^1.0.0"
+  },
+  "engines": {
+    "node": "14.x"
+  }
 }
