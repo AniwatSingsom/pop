@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ສົມໝາຍປັອບໆ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>ສົມໝາຍປັອບໆ</h1>
+        <p id="target">0</p>
+        <img src="./imge1.png" id="imge1">
+    </div>
+
+    <script>
+        window.onload = () => {
+            let img = document.querySelector('#imge1');
+            let counter = document.querySelector('#target');
+            let score = 0;
+            let sound = new Audio('lol.mp3');
+
+            img.addEventListener('mousedown', () => {
+                img.src = 'imge2.png';
+                sound.play();
+                addToCounter();
+
+                sound.onended = () => {
+                    img.src = 'imge1.png';
+                };
+            });
+
+            function addToCounter() {
+                score++;
+                counter.innerHTML = score;
+            }
+        }
+    </script>
+</body>
+</html>
